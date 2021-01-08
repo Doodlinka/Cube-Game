@@ -11,7 +11,7 @@ public class Boss1AI : MonoBehaviour
     public float maxcld, spd;
     public AudioSource source;
     public AudioClip hitSound;
-    public DoorScript door;
+    public Door door;
     public int attack;
     public bool secondPhase;
     public Vector3 goal;
@@ -23,7 +23,7 @@ public class Boss1AI : MonoBehaviour
         attack = 0;
         triggered = false;
         player = GameObject.FindGameObjectWithTag("Player");
-        door = FindObjectOfType<DoorScript>();
+        door = FindObjectOfType<Door>();
         secondPhase = false;
         maxH = GetComponent<HealthScript>().health;
     }
@@ -34,7 +34,7 @@ public class Boss1AI : MonoBehaviour
         cooldown += Time.deltaTime;
         cooldown = Mathf.Clamp(cooldown, 0, maxcld);
 
-        if (!triggered && door.open) {
+        if (!triggered && door.Open) {
             triggered = true;
         }
         

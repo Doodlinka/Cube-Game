@@ -44,8 +44,8 @@ public class EnemyAI : MonoBehaviour
 
     void OnCollisionStay(Collision other) {
         GameObject obj = other.collider.gameObject;
-        if(obj.name == "Door(Clone)" && !obj.GetComponent<DoorScript>().open && Random.Range(1, 101) == 100) {
-            obj.GetComponent<DoorScript>().ChangeState();
+        if (obj.TryGetComponent<Door>(out Door door) && !door.Open && Random.Range(1, 101) == 100) {
+            door.OnInteract();
         }
     }
 

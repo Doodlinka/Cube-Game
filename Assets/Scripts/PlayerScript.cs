@@ -83,9 +83,9 @@ public class PlayerScript : MonoBehaviour
             if (hit.collider) {
                 GameObject tmp = hit.collider.gameObject;
 
-                if(tmp.tag == "Interactable" && Vector3.Distance(transform.position, tmp.transform.position) < 3) {
+                if(tmp.TryGetComponent<IInteractable>(out IInteractable interactable) && Vector3.Distance(transform.position, tmp.transform.position) < 3) {
                     PlayerPrefs.SetInt("health", healthScript.health);
-                    interactables.Action(tmp);
+                    interactables.Interact(interactable);
                 }
             }
         }
