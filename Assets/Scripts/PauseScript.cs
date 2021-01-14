@@ -51,14 +51,7 @@ public class PauseScript : MonoBehaviour
         pauseBackground.enabled = paused;
         pauseCanvas.enabled = paused;
 
-        foreach (Rigidbody rb in rigidbodies) {
-            if (paused) {
-                rb.Sleep();
-            }
-            else {
-                rb.WakeUp();
-            }
-        }
+        Time.timeScale = paused ? 0 : 1;
 
         if (paused) {
             Cursor.lockState = CursorLockMode.None;
