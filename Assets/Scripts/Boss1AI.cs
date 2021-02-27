@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+enum EnemyPrefabPathIDs {
+    small = 0,
+    medium = 1,
+    large = 2
+}
+
 public class Boss1AI : MonoBehaviour
 {
-    private const string _EnemyPrefabFolder = "Enemies";
+    private const string _EnemyPrefabFolder = "Resources/Enemies/";
     // i don't get why arrays can't be const
     private string[] _EnemyPrefabNames = new string[3] {"Enemy(small)", "Enemy(medium)", "Enemy(big)"};
 
@@ -21,6 +27,8 @@ public class Boss1AI : MonoBehaviour
     private float cooldown;
     private bool triggered;
 
+    private List<GameObject> _minionPrefabs = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +39,9 @@ public class Boss1AI : MonoBehaviour
         door = FindObjectOfType<Door>();
         secondPhase = false;
         maxHealth = GetComponent<HealthScript>().health;
+        for (int i = 0; i < _EnemyPrefabNames.Length; i++) {
+            _minionPrefabs.Add(Resources.Load<GameObject>(_EnemyPrefabNames[i]));
+        }
     }
 
     // Update is called once per frame
@@ -75,7 +86,7 @@ public class Boss1AI : MonoBehaviour
             }
             else if (attackMode == 5) {
                 for (int i = 0; i < 6; i++) {
-                    GameObject tmp = Instantiate(mSmall);
+                    GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.small]);
                     tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
                     tmp.GetComponent<HealthScript>().dropsHealth = false;
                 }
@@ -84,7 +95,7 @@ public class Boss1AI : MonoBehaviour
             }
             else if (attackMode == 4) {
                 for (int i = 0; i < 4; i++) {
-                    GameObject tmp = Instantiate(mMedium);
+                    GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.medium]);
                     tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
                 }
                 attackMode = 0;
@@ -92,7 +103,7 @@ public class Boss1AI : MonoBehaviour
             }
             else if (attackMode == 3) {
                 for (int i = 0; i < 2; i++) {
-                    GameObject tmp = Instantiate(mBig);
+                    GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.large]);
                     tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
                 }
                 attackMode = 0;
