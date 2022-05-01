@@ -12,12 +12,7 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         if (PlayerPrefs.GetInt("level") == 4) {
-            GameObject tmp = Instantiate(boss1);
-            tmp.transform.position = new Vector3(10, 1.5f, 12);
-            return;
-        }
-        if (PlayerPrefs.GetInt("level") == 8) {
-            GameObject tmp = Instantiate(boss2);
+            GameObject tmp = Random.value < 0.5 ? Instantiate(boss1) : Instantiate(boss2);
             tmp.transform.position = new Vector3(10, 1.5f, 12);
             return;
         }

@@ -121,7 +121,7 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.G)) {
             healthScript.godmode = !healthScript.godmode;
-            healthScript.text.text = "Godmode";
+            healthScript.text.text = healthScript.godmode ? "Godmode" : healthScript.health.ToString();
         }
     }
 

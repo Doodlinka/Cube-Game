@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityStandardAssets.Characters.FirstPerson;
 
 public class HealthScript : MonoBehaviour
 {
@@ -13,16 +10,11 @@ public class HealthScript : MonoBehaviour
     public GameObject heal, exit;
     public bool dropsHealth = true;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (tag == "Player" && !godmode) {
+    public void TakeDamage(int dmg) {
+        if (!godmode) {
+            health -= dmg;
+        }
+        if (tag == "Player") {
             text.text = "Health: " + health.ToString();
         }
         if (health <= 0) {
@@ -37,6 +29,7 @@ public class HealthScript : MonoBehaviour
                 SceneManager.LoadScene("Game Over");
             }
             else {
+                // TODO: oh dear god, GO names (store an onDeath function?)
                 if (transform.name == "Boss1(Clone)") {
                     PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") + 25 + PlayerPrefs.GetInt("golddrop"));
                     for (int i = 0; i < 10; i++) {
@@ -64,12 +57,6 @@ public class HealthScript : MonoBehaviour
                 }
             }
             Destroy(this.gameObject);
-        }
-    }
-
-    public void TakeDamage(int dmg) {
-        if (!godmode) {
-            health -= dmg;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.Characters.FirstPerson;
 
@@ -9,7 +7,7 @@ public class RoomExit : MonoBehaviour, IInteractable
     public void OnInteract() {
         PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level") + 1);
 
-        if (PlayerPrefs.GetInt("level") > 8) {
+        if (PlayerPrefs.GetInt("level") > 5) {
             PlayerPrefs.DeleteKey("level");
             PlayerPrefs.DeleteKey("health");
 

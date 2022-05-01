@@ -103,15 +103,13 @@ public class Boss2AI : MonoBehaviour
                 }
                 else if (attack == 3) {
                     for (int i = 0; i < 8; i++) {
-                        tmp.goal = transform.position + new Vector3(Random.value, 0, Random.value) * 5;
-                        tmp.hasGoal = true;
+                        tmp.direction = (player.transform.position - transform.position).normalized;
                         tmp.speed = 3;
                     }
                 }
                 else if (attack == 4) {
                     for (int i = 0; i < 4; i++) {
-                        tmp.target = player.transform;
-                        tmp.isHoming = true;
+                        tmp.homingTarget = player.transform;
                         tmp.speed = 2;
                     }
                 }

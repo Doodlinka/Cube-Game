@@ -10,30 +10,20 @@ public class ProjectileScript : MonoBehaviour
     public bool isExplosive;
     public GameObject explosion;
     public AudioClip explosionSound;
-    public bool isHoming = false, hasGoal = false;
-    public Transform target;
-    private float lifetime;
-    public Vector3 goal;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        lifetime = 0;
-    }
+    private float lifetime = 0;
+    public float maxLifetime = 8;
+    public Transform homingTarget;
 
     // Update is called once per frame
     void Update()
     {
         lifetime += Time.deltaTime;
-        if (lifetime > 7.5) {
+        if (lifetime >= maxLifetime) {
             Destroy(gameObject);
         }
 
-        if (isHoming) { 
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-        }
-        else if (hasGoal) {
-            transform.position = Vector3.MoveTowards(transform.position, goal, speed * Time.deltaTime);
+        if (homingTarget != null) { 
+            transform.position = Vector3.MoveTowards(transform.position, homingTarget.position, speed * Time.deltaTime);
         }
         else {
             transform.Translate(direction * speed * Time.deltaTime);

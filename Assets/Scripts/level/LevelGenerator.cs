@@ -1,44 +1,48 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelGenerator : MonoBehaviour {
-
+	// TODO: all the comments below and add enum for tile ids
 	public GameObject currentPrefab;
+	// create myself
 	public GameObject[] prefabs = new GameObject[4];
+	// create myself
 	public GameObject minimapPrefab;
-
+	// create myself
 	public GameObject characterController;
-
+	// create myself
 	public GameObject floorParent;
+	// create myself
 	public GameObject wallsParent;
-
+	// create myself
 	public GameObject exitPrefab, doorPrefab;
-
+	// create myself
 	public BossRooms bRooms;
 
 	// allows us to see the maze generation from the scene view
 	public bool generateRoof = true;
 
 	// number of times we want to "dig" in our maze
-	public int tilesToPlace;
+	private int tilesToPlace;
 
+	// make private + readonly property
 	public int mazeSize;
 
 	// this will determine whether we've placed the character controller
 	private bool characterPlaced = false;
 
 	// 2D array representing the map
+	// make private + readonly property
 	public int[,] mapData;
 
+	// make private + readonly property
 	public int level;
 	public Text text;
 
 	// Use this for initialization
 	void Start () {
 		if (PlayerPrefs.HasKey("level")) {
-			level = (int)((PlayerPrefs.GetInt("level") - 1) / 2);
+			level = (PlayerPrefs.GetInt("level") - 1);
 		}
 		else {
 			level = 0;
@@ -48,16 +52,23 @@ public class LevelGenerator : MonoBehaviour {
 
 		characterPlaced = false;
 
-		currentPrefab = prefabs[level];
+		if (level > prefabs.Length) {
+			currentPrefab = prefabs[prefabs.Length - 1];
+		}
+		else {
+			currentPrefab = prefabs[level];
+		}
 
 		// randomize numbers
-		tilesToPlace = Random.Range(300, 401);
+		tilesToPlace = Random.Range(200, 301);
 
-		if (PlayerPrefs.GetInt("level") == 4) {
-			mapData = bRooms.Room1();
-		}
-		else if (PlayerPrefs.GetInt("level") == 8) {
-			mapData = bRooms.Room2();
+		if (PlayerPrefs.GetInt("level") == 5) {
+			if (Random.value < 0.5) {
+				mapData = bRooms.Room1();
+			}
+			else {
+				mapData = bRooms.Room2();
+			}
 		}
 		else {
 			// initialize map 2D array
@@ -104,7 +115,7 @@ public class LevelGenerator : MonoBehaviour {
 			}
 		}
 
-		if (PlayerPrefs.GetInt("level") != 4 && PlayerPrefs.GetInt("level") != 8) {
+		if (PlayerPrefs.GetInt("level") != 4) {
 			// create exit position
 			int exitX, exitZ;
 			do {

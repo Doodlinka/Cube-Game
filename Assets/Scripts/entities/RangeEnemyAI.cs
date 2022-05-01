@@ -36,11 +36,10 @@ public class RangeEnemyAI : MonoBehaviour
 
             GameObject tmp = Instantiate(projectile);
             tmp.transform.position = transform.position;
-            tmp.GetComponent<ProjectileScript>().target = player.transform;
+            tmp.GetComponent<ProjectileScript>().direction = (player.transform.position - transform.position).normalized;
             tmp.GetComponent<ProjectileScript>().speed = 3;
             tmp.GetComponent<ProjectileScript>().tag = tag;
             tmp.GetComponent<ProjectileScript>().damage = 15;
-            tmp.GetComponent<ProjectileScript>().isHoming = true;
         }
     }
 
