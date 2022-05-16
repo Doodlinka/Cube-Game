@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ProjectileScript : MonoBehaviour
 {
@@ -33,7 +31,7 @@ public class ProjectileScript : MonoBehaviour
     void OnCollisionEnter(Collision hit) {
         GameObject hitGO = hit.collider.gameObject;
 
-        if ((hitGO.tag == "Player" || hitGO.tag == "Enemy") && hitGO.GetComponent<HealthScript>()) {
+        if (hitGO.GetComponent<HealthScript>()) {
             hitGO.GetComponent<HealthScript>().TakeDamage(damage);
         }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 enum EnemyPrefabPathIDs {
     small = 0,
@@ -8,113 +6,85 @@ enum EnemyPrefabPathIDs {
     large = 2
 }
 
-public class Boss1AI : MonoBehaviour
+
+public class Boss1AI : EnemyAI
 {
-    private const string _EnemyPrefabFolder = "Resources/Enemies/";
+    private const string _EnemyPrefabFolder = "Prefabs/Enemies/";
     // i don't get why arrays can't be const
-    private string[] _EnemyPrefabNames = new string[3] {"Enemy(small)", "Enemy(medium)", "Enemy(big)"};
+    private string[] _EnemyPrefabNames = new string[3] {"Enemy(small)", "Enemy", "Enemy(big)"};
 
-    public AudioSource source;
-    public AudioClip hitSound;
-    public Door door;
-    private GameObject player;
-    public Vector3 goal;
+    [SerializeField] protected float dashForce;
+    protected int attack;
+    protected bool secondPhase;
 
-    public int damage, maxHealth;
-    public float maxCooldown, speed;
-    public int attackMode;
-    public bool secondPhase;
-    private float cooldown;
-    private bool triggered;
-
-    private List<GameObject> _minionPrefabs = new List<GameObject>();
+    private GameObject[] _minionPrefabs = new GameObject[3];
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        cooldown = 0;
-        attackMode = 0;
-        triggered = false;
-        player = GameObject.FindGameObjectWithTag("Player");
-        door = FindObjectOfType<Door>();
-        secondPhase = false;
-        maxHealth = GetComponent<HealthScript>().health;
+        base.Start();
         for (int i = 0; i < _EnemyPrefabNames.Length; i++) {
-            _minionPrefabs.Add(Resources.Load<GameObject>(_EnemyPrefabNames[i]));
+            _minionPrefabs[i] = Utils.LoadObject<GameObject>(_EnemyPrefabNames[i], _EnemyPrefabFolder);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    // override only to remove trigger on distance 
+    protected override void Update()
     {
-        cooldown += Time.deltaTime;
-        cooldown = Mathf.Clamp(cooldown, 0, maxCooldown);
-
-        if (!triggered && door.Open) {
+        cooldown -= Time.deltaTime;
+        if (!triggered && _healthScript.health < maxHealth) {
+            Debug.Log("triggered");
             triggered = true;
         }
-        
+
         if (triggered) {
-            if (GetComponent<HealthScript>().health < maxHealth / 2) {
-                secondPhase = true;
-            }
-
-            if (cooldown >= maxCooldown && attackMode == 0) {
-                if (secondPhase) {
-                    attackMode = Random.Range(1, 6);
-                }
-                else {
-                    attackMode = Random.Range(1, 4);
-                }
-                if (attackMode == 1 || attackMode == 2) {
-                    goal = player.transform.position;
-                }
-                cooldown = 0;
-            }
-
-            if (attackMode == 1 || attackMode == 2) {
-                transform.position = Vector3.MoveTowards(transform.position, goal, speed * Time.deltaTime);
-                if (Vector3.Distance(transform.position, goal) < 0.5) {
-                    attackMode = 0;
-                }
-                if (Vector3.Distance(transform.position, player.transform.position) < 2 && player.GetComponent<HealthScript>()) {
-                    player.GetComponent<HealthScript>().TakeDamage(damage);
-                    source.clip = hitSound;
-                    source.Play();
-                }
-                cooldown = 0;
-            }
-            else if (attackMode == 5) {
-                for (int i = 0; i < 6; i++) {
-                    GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.small]);
-                    tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
-                    tmp.GetComponent<HealthScript>().dropsHealth = false;
-                }
-                attackMode = 0;
-                cooldown = 0;
-            }
-            else if (attackMode == 4) {
-                for (int i = 0; i < 4; i++) {
-                    GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.medium]);
-                    tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
-                }
-                attackMode = 0;
-                cooldown = 0;
-            }
-            else if (attackMode == 3) {
-                for (int i = 0; i < 2; i++) {
-                    GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.large]);
-                    tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
-                }
-                attackMode = 0;
-                cooldown = 0;
-            }
+            Attack();
         }
     }
 
-    void OnCollisionEnter(Collision other) {
-        if (other.gameObject.tag == "Explosion") {
-            GetComponent<HealthScript>().TakeDamage(50 + (PlayerPrefs.GetInt("damage") * 25));
+    protected override void Attack() {
+        if (_healthScript.health < maxHealth / 2) {
+            secondPhase = true;
+        }
+
+        if (cooldown <= 0) {   
+            if (attack >= 1 && attack <= 6) {
+                if (attack == 1 || attack == 2) {
+                    _rb.AddForce((player.transform.position - transform.position) * dashForce, ForceMode.Impulse);
+                }
+                // TODO: remove minion spawn repetition
+                else if (attack == 5) {
+                    for (int i = 0; i < 6; i++) {
+                        GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.small]);
+                        tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
+                        tmp.GetComponent<HealthScript>().dropsHealth = false;
+                    }
+                }
+                else if (attack == 4) {
+                    for (int i = 0; i < 4; i++) {
+                        GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.medium]);
+                        tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
+                        tmp.GetComponent<HealthScript>().dropsHealth = false;
+                    }
+                }
+                else if (attack == 3) {
+                    for (int i = 0; i < 2; i++) {
+                        GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.large]);
+                        tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
+                        tmp.GetComponent<HealthScript>().dropsHealth = false;
+                    }
+                }
+                cooldown = maxCooldown;
+                attack = 0; 
+            }
+            else {
+                if (secondPhase) {
+                    attack = Random.Range(1, 6);
+                }
+                else {
+                    attack = Random.Range(1, 4);
+                }
+            }
         }
     }
 }

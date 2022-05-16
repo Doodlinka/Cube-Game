@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
@@ -11,7 +9,7 @@ public class Spawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (PlayerPrefs.GetInt("level") == 4) {
+        if (PlayerPrefs.GetInt("level") == 5) {
             GameObject tmp = Random.value < 0.5 ? Instantiate(boss1) : Instantiate(boss2);
             tmp.transform.position = new Vector3(10, 1.5f, 12);
             return;

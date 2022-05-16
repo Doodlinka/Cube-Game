@@ -16,8 +16,6 @@ public class LevelGenerator : MonoBehaviour {
 	public GameObject wallsParent;
 	// create myself
 	public GameObject exitPrefab, doorPrefab;
-	// create myself
-	public BossRooms bRooms;
 
 	// allows us to see the maze generation from the scene view
 	public bool generateRoof = true;
@@ -52,7 +50,7 @@ public class LevelGenerator : MonoBehaviour {
 
 		characterPlaced = false;
 
-		if (level > prefabs.Length) {
+		if (level >= prefabs.Length) {
 			currentPrefab = prefabs[prefabs.Length - 1];
 		}
 		else {
@@ -60,14 +58,14 @@ public class LevelGenerator : MonoBehaviour {
 		}
 
 		// randomize numbers
-		tilesToPlace = Random.Range(200, 301);
+		tilesToPlace = Random.Range(150, 251);
 
 		if (PlayerPrefs.GetInt("level") == 5) {
 			if (Random.value < 0.5) {
-				mapData = bRooms.Room1();
+				mapData = BossRooms.Room1(mazeSize);
 			}
 			else {
-				mapData = bRooms.Room2();
+				mapData = BossRooms.Room2(mazeSize);
 			}
 		}
 		else {
@@ -105,17 +103,16 @@ public class LevelGenerator : MonoBehaviour {
 					// flag as placed so we never consider placing again
 					characterPlaced = true;
 				}
-
-				// create floor and ceiling
-				CreateChildPrefab(currentPrefab, floorParent, x, 0, z);
-
-				if (generateRoof) {
-					CreateChildPrefab(currentPrefab, wallsParent, x, 4, z);
-				}
 			}
 		}
+		GameObject floor = Instantiate(currentPrefab);
+		floor.transform.position = new Vector3(mazeSize/2, 0, mazeSize/2);
+		floor.transform.localScale = new Vector3(mazeSize, 1, mazeSize);
+		if (generateRoof) {
+			Instantiate(floor).transform.position = new Vector3(mazeSize/2, 4, mazeSize/2);
+		}
 
-		if (PlayerPrefs.GetInt("level") != 4) {
+		if (PlayerPrefs.GetInt("level") != 5) {
 			// create exit position
 			int exitX, exitZ;
 			do {

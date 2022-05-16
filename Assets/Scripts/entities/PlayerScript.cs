@@ -1,34 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Rigidbody), typeof(HealthScript))]
 public class PlayerScript : MonoBehaviour
 {
-    public Camera cam;
-    public InteractablesScript interactables;
-    public GameObject projectile;
+    [SerializeField] private Camera cam;
+    [SerializeField] private InteractablesScript interactables;
+    [SerializeField] private GameObject projectile;
     private float cooldown;
+    [SerializeField] private float maxCooldown;
 
-    public AudioClip[] shootSounds;
-    public AudioSource audioSource;
+    [SerializeField] private AudioClip[] shootSounds;
+    [SerializeField] private AudioSource audioSource;
 
-    public PauseScript pauseScript;
+    [SerializeField] private PauseScript pauseScript;
 
-    public GameObject markerPrefab;
-    public int markerCount;
-    public Text text;
+    [SerializeField] private GameObject markerPrefab;
+    [SerializeField] private int markerCount;
+    [SerializeField] private Text text;
     
-    public Image dot;
+    [SerializeField] private Image dot;
 
-    public HealthScript healthScript;
+    private HealthScript healthScript;
+    private Rigidbody _rb;
 
     // Start is called before the first frame update
     void Start()
     {
         cooldown = 0;
-        markerCount = 5;
         healthScript = GetComponent<HealthScript>();
+        _rb = GetComponent<Rigidbody>();
         if (PlayerPrefs.HasKey("health")) {
             healthScript.health = PlayerPrefs.GetInt("health");
         }
@@ -40,16 +41,15 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        cooldown += Time.deltaTime;
-        cooldown = Mathf.Clamp(cooldown, 0, 0.75f);
+        cooldown -= Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
             PlayerPrefs.SetInt("health", healthScript.health);
             pauseScript.Pause();
         }
 
-        if (Input.GetMouseButton(0) && cooldown >= 0.75f) {
-            cooldown -= 0.75f;
+        if (Input.GetMouseButton(0) && cooldown <= 0) {
+            cooldown = maxCooldown;
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
             GameObject tmp = Instantiate(projectile);
@@ -57,12 +57,7 @@ public class PlayerScript : MonoBehaviour
             tmp.GetComponent<ProjectileScript>().direction = ray.direction;
             tmp.GetComponent<ProjectileScript>().speed = 25;
 
-            if (PlayerPrefs.GetInt("explosivebullets") == 1) {
-                tmp.GetComponent<ProjectileScript>().isExplosive = true;
-            }
-            else {
-                tmp.GetComponent<ProjectileScript>().isExplosive = false;
-            }
+            tmp.GetComponent<ProjectileScript>().isExplosive = PlayerPrefs.GetInt("explosivebullets") != 0;
             
             if (healthScript.godmode) {
                 tmp.GetComponent<ProjectileScript>().damage = 99999;
@@ -121,18 +116,19 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.G)) {
             healthScript.godmode = !healthScript.godmode;
-            healthScript.text.text = healthScript.godmode ? "Godmode" : healthScript.health.ToString();
+            healthScript.text.text = healthScript.godmode ? "Godmode" : "Health: " + healthScript.health.ToString();
         }
     }
 
     void OnTriggerEnter(Collider other) {
         if (other.tag == "Heal" && healthScript.health < 100 + (PlayerPrefs.GetInt("hp") * 10)) {
             healthScript.health = Mathf.Clamp(healthScript.health + 20, 0, 100 + (PlayerPrefs.GetInt("hp") * 10));
+            healthScript.text.text = healthScript.godmode ? "Godmode" : "Health: " + healthScript.health.ToString();
             Destroy(other.gameObject);
         }
-        if (other.tag == "Explosion") {
+        if (other.TryGetComponent<ExplosionScript>(out ExplosionScript e)) {
             healthScript.TakeDamage(50);
-            other.gameObject.layer = 8;
+            _rb.AddExplosionForce(e.size, e.transform.position, e.size);
         }
     }
 }

@@ -59,6 +59,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -83,6 +85,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &6751956090900100842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,20 +98,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1b1a320bfa271489dcf8a5e199b527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  mSmall: {fileID: 7912726277146515017, guid: 182015c35dcafd9449bad1dc5124729a, type: 3}
-  mMedium: {fileID: 7912726277146515017, guid: 9ce875d4c038ad74288bf2df0412dd17, type: 3}
-  mBig: {fileID: 7912726277146515017, guid: 0834ced8bfe08fd49a2335104e3f8421, type: 3}
-  dmg: 25
-  maxH: 1500
-  maxcld: 2.5
-  spd: 10
+  dmg: 20
+  maxHealth: 1800
+  maxCooldown: 1
+  speed: 2.5
   source: {fileID: 120660093929224774}
   hitSound: {fileID: 8300000, guid: 29a6cffb36ec4fa4b984a2b600617fca, type: 3}
-  door: {fileID: 0}
-  attack: 0
-  secondPhase: 0
-  goal: {x: 0, y: 0, z: 0}
+  dashForce: 25
 --- !u!114 &3487095983295400163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2277bac55ac640e4bad4ba3740cd92d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1500
+  health: 1800
   godmode: 0
   text: {fileID: 0}
   heal: {fileID: 1641105571346691968, guid: f5b6a5e9b16359f48b73397c61916482, type: 3}
@@ -141,7 +137,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 48
   m_CollisionDetection: 0
 --- !u!65 &8970282159631131914
 BoxCollider:

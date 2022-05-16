@@ -9,7 +9,7 @@ namespace UnityStandardAssets.Utility
         public float minHeight = 10;
         public float minShadowDistance = 80;
         public float minShadowBias = 1;
-        public float maxHeight = 1000;
+        public float maxHealtheight = 1000;
         public float maxShadowDistance = 10000;
         public float maxShadowBias = 0.1f;
         public float adaptTime = 1;
@@ -41,7 +41,7 @@ namespace UnityStandardAssets.Utility
                 m_SmoothHeight = Mathf.SmoothDamp(m_SmoothHeight, height, ref m_ChangeSpeed, adaptTime);
             }
 
-            float i = Mathf.InverseLerp(minHeight, maxHeight, m_SmoothHeight);
+            float i = Mathf.InverseLerp(minHeight, maxHealtheight, m_SmoothHeight);
 
             QualitySettings.shadowDistance = Mathf.Lerp(minShadowDistance, maxShadowDistance, i);
             sunLight.shadowBias = Mathf.Lerp(minShadowBias, maxShadowBias, 1 - ((1 - i)*(1 - i)));

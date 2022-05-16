@@ -1,57 +1,61 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody), typeof(HealthScript))]
 public class EnemyAI : MonoBehaviour
 {
-    private float cooldown;
-    private bool triggered;
-    public GameObject player;
-    public int dmg, maxH;
-    public float maxcld, spd;
-    public AudioSource source;
-    public AudioClip hitSound;
+    protected float cooldown;
+    protected bool triggered;
+    protected GameObject player;
+    [SerializeField] protected int dmg, maxHealth;
+    [SerializeField] protected float maxCooldown, speed;
+    [SerializeField] protected AudioSource source;
+    [SerializeField] protected AudioClip hitSound;
+    protected Rigidbody _rb;
+    protected HealthScript _healthScript;
 
-    // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        cooldown = 0;
-        triggered = false;
+        _rb = GetComponent<Rigidbody>();
+        _healthScript = GetComponent<HealthScript>();
         player = GameObject.FindGameObjectWithTag("Player");
-        maxH = GetComponent<HealthScript>().health;
+        maxHealth =_healthScript.health;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        cooldown += Time.deltaTime;
-        cooldown = Mathf.Clamp(cooldown, 0, maxcld);
-        if (!triggered && GetComponent<HealthScript>().health < maxH) {
+        cooldown -= Time.deltaTime;
+        if (!triggered &&_healthScript.health < maxHealth
+          || Vector3.Distance(transform.position, player.transform.position) <= 20) {
             triggered = true;
         }
 
-        if (Vector3.Distance(transform.position, player.transform.position) <= 15 || triggered) {
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, spd * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, player.transform.position) < 1.25 && cooldown >= maxcld && player.GetComponent<HealthScript>()) {
-                player.GetComponent<HealthScript>().TakeDamage(dmg);
-                source.clip = hitSound;
-                source.Play();
-                cooldown -= maxcld;
-            }
+        if (triggered) {
+            Attack();
         }
     }
 
-    void OnCollisionStay(Collision other) {
+    protected void OnCollisionStay(Collision other) {
         GameObject obj = other.collider.gameObject;
         if (obj.TryGetComponent<Door>(out Door door) && !door.Open && Random.Range(1, 101) == 100) {
             door.OnInteract();
         }
+        // TODO: may still need the distance instead of collision check in some cases
+        if (cooldown <= 0 && obj.TryGetComponent<PlayerScript>(out PlayerScript pl)) {
+            player.GetComponent<HealthScript>().TakeDamage(dmg);
+            source.clip = hitSound;
+            source.Play();
+            cooldown = maxCooldown;
+        }
     }
 
-    void OnCollisionEnter(Collision other) {
-        if (other.gameObject.tag == "Explosion") {
-            GetComponent<HealthScript>().TakeDamage(50 + (PlayerPrefs.GetInt("damage") * 25));
+    protected void OnTriggerEnter(Collider other) {
+        if (other.TryGetComponent<ExplosionScript>(out ExplosionScript e)) {
+           _healthScript.TakeDamage(50);
+           _rb.AddExplosionForce(e.size, e.transform.position, e.size);
         }
+    }
+
+    protected virtual void Attack() {
+        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
     }
 }

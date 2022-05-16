@@ -298,7 +298,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Godmode
+  m_Text: HP text
 --- !u!222 &246809631
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1047,7 +1047,6 @@ GameObject:
   - component: {fileID: 967451504}
   - component: {fileID: 967451503}
   - component: {fileID: 967451505}
-  - component: {fileID: 967451508}
   - component: {fileID: 967451506}
   - component: {fileID: 967451507}
   m_Layer: 0
@@ -1084,7 +1083,6 @@ MonoBehaviour:
     type: 3}
   doorPrefab: {fileID: 3892131849852156573, guid: 22054fed60d3fc3438e6f965247d8365,
     type: 3}
-  bRooms: {fileID: 967451508}
   generateRoof: 1
   mazeSize: 30
   level: 0
@@ -1154,22 +1152,6 @@ MonoBehaviour:
   player: {fileID: 1038169625}
   pauseCanvas: {fileID: 283499904}
   pauseBackground: {fileID: 1692144116}
---- !u!114 &967451508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 967451502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbf9c396feaf5364fbbe1b14b5d475bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  generator: {fileID: 967451503}
-  spawner: {fileID: 967451505}
-  bosswall: {fileID: 4650178885239702277, guid: cefa5677adab6124d9c6f1a198826f2e,
-    type: 3}
 --- !u!1 &1034316449
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,6 +1485,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2000000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: near clip plane
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+      propertyPath: m_Constraints
+      value: 48
+      objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -1536,6 +1526,16 @@ PrefabInstance:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 1038169627}
+    - target: {fileID: 2179478271924835094, guid: 5e9e851c0e142814dac026a256ba2ac0,
+        type: 3}
+      propertyPath: markerCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2179478271924835094, guid: 5e9e851c0e142814dac026a256ba2ac0,
+        type: 3}
+      propertyPath: maxCooldown
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2179478271924835094, guid: 5e9e851c0e142814dac026a256ba2ac0,
         type: 3}
       propertyPath: pauseScript
