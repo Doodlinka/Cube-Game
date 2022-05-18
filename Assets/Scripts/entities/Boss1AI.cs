@@ -39,6 +39,7 @@ public class Boss1AI : EnemyAI
 
         if (triggered) {
             Attack();
+            TryHitMelee();
         }
     }
 

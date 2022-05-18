@@ -38,7 +38,6 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         cooldown -= Time.deltaTime;
@@ -71,6 +70,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.E)) {
+            Debug.Log("E");
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             Physics.Raycast(ray, out hit);
@@ -79,6 +79,7 @@ public class PlayerScript : MonoBehaviour
                 GameObject tmp = hit.collider.gameObject;
 
                 if(tmp.TryGetComponent<IInteractable>(out IInteractable interactable) && Vector3.Distance(transform.position, tmp.transform.position) < 3) {
+                    Debug.Log("interact");
                     PlayerPrefs.SetInt("health", healthScript.health);
                     interactables.Interact(interactable);
                 }
@@ -128,7 +129,7 @@ public class PlayerScript : MonoBehaviour
         }
         if (other.TryGetComponent<ExplosionScript>(out ExplosionScript e)) {
             healthScript.TakeDamage(50);
-            _rb.AddExplosionForce(e.size, e.transform.position, e.size);
+            _rb.AddExplosionForce(e.speed*20, e.transform.position, e.size);
         }
     }
 }

@@ -28,41 +28,15 @@ public class UpgradeScript : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (healthText.gameObject.activeSelf && PlayerPrefs.GetInt("hp") >= 5) {
-            healthText.gameObject.SetActive(false);
-        }
-        if (healthChanceText.gameObject.activeSelf && PlayerPrefs.GetInt("hdrop") >= 2) {
-            healthChanceText.gameObject.SetActive(false);
-        }
-        if (goldDropText.gameObject.activeSelf && PlayerPrefs.GetInt("golddrop") >= 2) {
-            goldDropText.gameObject.SetActive(false);
-        }
-        if (damageText.gameObject.activeSelf && PlayerPrefs.GetInt("damage") >= 2) {
-            damageText.gameObject.SetActive(false);
-        }
-        if (crateChanceText.gameObject.activeSelf && PlayerPrefs.GetInt("cratechance") >= 3) {
-            crateChanceText.gameObject.SetActive(false);
-        }
-        if (explosiveBulletsText.gameObject.activeSelf && PlayerPrefs.GetInt("explosivebullets") >= 1) {
-            explosiveBulletsText.gameObject.SetActive(false);
-        }
-
-        healthText.text = "Health + 10: " + ((PlayerPrefs.GetInt("hp") + 1) * 20).ToString() + "g";
-        damageText.text = "Damage + 25: " + ((PlayerPrefs.GetInt("damage") + 1) * 50).ToString() + "g";
-        goldDropText.text = "Gold drop + 1: " + ((PlayerPrefs.GetInt("golddrop") + 1) * 50).ToString() + "g";
-        healthChanceText.text = "Heal drop +: " + ((PlayerPrefs.GetInt("hdrop") + 1) * 50).ToString() + "g";
-        crateChanceText.text = "Crate chance +: " + ((PlayerPrefs.GetInt("cratechance") + 1) * 30).ToString() + "g";
-        explosiveBulletsText.text = "Explosive bullets: " + ((PlayerPrefs.GetInt("explosivebullets") + 1) * 100).ToString() + "g";
-        goldText.text = "Gold: " + PlayerPrefs.GetInt("gold");
-    }
-
     public void UpgradeHealth() {
         if (PlayerPrefs.GetInt("hp") < 5 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("hp") + 1) * 20) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("hp") + 1) * 20));
             PlayerPrefs.SetInt("hp", PlayerPrefs.GetInt("hp") + 1);
+            healthText.text = "Health + 10: " + ((PlayerPrefs.GetInt("hp") + 1) * 20).ToString() + "g";
+            goldText.text = "Gold: " + PlayerPrefs.GetInt("gold");
+        }
+        if (PlayerPrefs.GetInt("hp") >= 5) {
+            healthText.gameObject.SetActive(false);
         }
     }
 
@@ -70,6 +44,11 @@ public class UpgradeScript : MonoBehaviour
         if (PlayerPrefs.GetInt("damage") < 2 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("damage") + 1) * 50) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("damage") + 1) * 50));
             PlayerPrefs.SetInt("damage", PlayerPrefs.GetInt("damage") + 1);
+            damageText.text = "Damage + 25: " + ((PlayerPrefs.GetInt("damage") + 1) * 50).ToString() + "g";
+            goldText.text = "Gold: " + PlayerPrefs.GetInt("gold");
+        }
+        if (PlayerPrefs.GetInt("damage") >= 2) {
+            damageText.gameObject.SetActive(false);
         }
     }
 
@@ -77,18 +56,33 @@ public class UpgradeScript : MonoBehaviour
         if (PlayerPrefs.GetInt("hdrop") < 2 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("hdrop") + 1) * 50) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("hdrop") + 1) * 50));
             PlayerPrefs.SetInt("hdrop", PlayerPrefs.GetInt("hdrop") + 1);
+            healthChanceText.text = "Heal drop +: " + ((PlayerPrefs.GetInt("hdrop") + 1) * 50).ToString() + "g";
+            goldText.text = "Gold: " + PlayerPrefs.GetInt("gold");
+        }
+        if (PlayerPrefs.GetInt("hdrop") >= 2) {
+            healthChanceText.gameObject.SetActive(false);
         }
     }
     public void UpgradeGoldDrop() {
         if (PlayerPrefs.GetInt("golddrop") < 2 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("golddrop") + 1) * 50) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("golddrop") + 1) * 50));
             PlayerPrefs.SetInt("golddrop", PlayerPrefs.GetInt("golddrop") + 1);
+            goldDropText.text = "Gold drop + 1: " + ((PlayerPrefs.GetInt("golddrop") + 1) * 50).ToString() + "g";
+            goldText.text = "Gold: " + PlayerPrefs.GetInt("gold");
+        }
+        if (PlayerPrefs.GetInt("golddrop") >= 2) {
+            goldDropText.gameObject.SetActive(false);
         }
     }
     public void UpgradeCrateChance() {
         if (PlayerPrefs.GetInt("cratechance") < 3 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("cratechance") + 1) * 50) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("cratechance") + 1) * 30));
             PlayerPrefs.SetInt("cratechance", PlayerPrefs.GetInt("cratechance") + 1);
+            crateChanceText.text = "Crate chance +: " + ((PlayerPrefs.GetInt("cratechance") + 1) * 30).ToString() + "g";
+            goldText.text = "Gold: " + PlayerPrefs.GetInt("gold");
+        }
+        if (PlayerPrefs.GetInt("cratechance") >= 3) {
+            crateChanceText.gameObject.SetActive(false);
         }
     }
 
@@ -96,6 +90,11 @@ public class UpgradeScript : MonoBehaviour
         if (PlayerPrefs.GetInt("explosivebullets") < 1 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("explosivebullets") + 1) * 50) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("explosivebullets") + 1) * 100));
             PlayerPrefs.SetInt("explosivebullets", PlayerPrefs.GetInt("explosivebullets") + 1);
+            explosiveBulletsText.text = "Explosive bullets: " + ((PlayerPrefs.GetInt("explosivebullets") + 1) * 100).ToString() + "g";
+            goldText.text = "Gold: " + PlayerPrefs.GetInt("gold");
         }
+        if (PlayerPrefs.GetInt("explosivebullets") >= 1) {
+            explosiveBulletsText.gameObject.SetActive(false);
+        }  
     }
 }

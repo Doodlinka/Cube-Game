@@ -31,6 +31,7 @@ public class EnemyAI : MonoBehaviour
 
         if (triggered) {
             Attack();
+            TryHitMelee();
         }
     }
 
@@ -39,23 +40,25 @@ public class EnemyAI : MonoBehaviour
         if (obj.TryGetComponent<Door>(out Door door) && !door.Open && Random.Range(1, 101) == 100) {
             door.OnInteract();
         }
-        // TODO: may still need the distance instead of collision check in some cases
-        if (cooldown <= 0 && obj.TryGetComponent<PlayerScript>(out PlayerScript pl)) {
-            player.GetComponent<HealthScript>().TakeDamage(dmg);
-            source.clip = hitSound;
-            source.Play();
-            cooldown = maxCooldown;
-        }
     }
 
     protected void OnTriggerEnter(Collider other) {
         if (other.TryGetComponent<ExplosionScript>(out ExplosionScript e)) {
            _healthScript.TakeDamage(50);
-           _rb.AddExplosionForce(e.size, e.transform.position, e.size);
+           _rb.AddExplosionForce(e.speed*20, e.transform.position, e.size);
         }
     }
 
     protected virtual void Attack() {
         transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+    }
+
+    protected virtual void TryHitMelee() {
+        if (cooldown <= 0 && Vector3.Distance(player.transform.position, transform.position) <= transform.localScale.magnitude) {
+            player.GetComponent<HealthScript>().TakeDamage(dmg);
+            source.clip = hitSound;
+            source.Play();
+            cooldown = maxCooldown;
+        }
     }
 }

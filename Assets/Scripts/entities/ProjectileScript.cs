@@ -12,7 +12,6 @@ public class ProjectileScript : MonoBehaviour
     public float maxLifetime = 8;
     public Transform homingTarget;
 
-    // Update is called once per frame
     void Update()
     {
         lifetime += Time.deltaTime;

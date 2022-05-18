@@ -16,18 +16,18 @@ public class PauseScript : MonoBehaviour
         ProjectileScript[] projectileScripts = FindObjectsOfType<ProjectileScript>();
         ExplosionScript[] explosionScripts = FindObjectsOfType<ExplosionScript>();
 
-        foreach (HealthScript hs in healthScripts) {
-            hs.enabled = paused;
-        }
-        foreach (EnemyAI ai in EnemyAIs) {
-            ai.enabled = paused;
-        }
-        foreach (ProjectileScript p in projectileScripts) {
-            p.enabled = paused;
-        }
-        foreach (ExplosionScript e in explosionScripts) {
-            e.enabled = paused;
-        }
+        // foreach (HealthScript hs in healthScripts) {
+        //     hs.enabled = paused;
+        // }
+        // foreach (EnemyAI ai in EnemyAIs) {
+        //     ai.enabled = paused;
+        // }
+        // foreach (ProjectileScript p in projectileScripts) {
+        //     p.enabled = paused;
+        // }
+        // foreach (ExplosionScript e in explosionScripts) {
+        //     e.enabled = paused;
+        // }
 
         player.GetComponent<PlayerScript>().enabled = paused;
         player.GetComponent<CharacterController>().enabled = paused;

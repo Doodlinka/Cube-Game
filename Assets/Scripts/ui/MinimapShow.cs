@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MinimapShow : MonoBehaviour
 {
@@ -13,7 +11,6 @@ public class MinimapShow : MonoBehaviour
         player = GameObject.FindWithTag("Player");
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!mr.enabled && Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z),
