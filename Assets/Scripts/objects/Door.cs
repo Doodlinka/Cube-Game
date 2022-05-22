@@ -15,7 +15,7 @@ public class Door : MonoBehaviour, IInteractable
         source = GetComponent<AudioSource>();
     }
 
-    public void OnInteract() {
+    public void Interact() {
         Open = !Open;
 
         GetComponent<Collider>().isTrigger = Open;

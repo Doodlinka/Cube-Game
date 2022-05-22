@@ -4,9 +4,8 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class RoomExit : MonoBehaviour, IInteractable
 {
-    public void OnInteract() {
+    public void Interact() {
         PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level") + 1);
-        Debug.Log("exit");
 
         if (PlayerPrefs.GetInt("level") > 5) {
             PlayerPrefs.DeleteKey("level");
@@ -21,7 +20,6 @@ public class RoomExit : MonoBehaviour, IInteractable
             SceneManager.LoadScene("Win");
         }
         else {
-            Debug.Log("new level");
             SceneManager.LoadScene("Game");
         }
     }

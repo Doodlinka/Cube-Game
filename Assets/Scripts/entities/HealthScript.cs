@@ -59,7 +59,7 @@ public class HealthScript : MonoBehaviour
                         GameObject tmp =  Instantiate(heal);
                         tmp.transform.position = transform.position;
                     }
-                    PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") + 1 + PlayerPrefs.GetInt("golddrop"));
+                    PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") + 2 + PlayerPrefs.GetInt("golddrop"));
                 }
             }
             Destroy(this.gameObject);

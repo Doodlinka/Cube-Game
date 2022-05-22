@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2277bac55ac640e4bad4ba3740cd92d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1800
+  health: 1500
   godmode: 0
   text: {fileID: 0}
   heal: {fileID: 1641105571346691968, guid: f5b6a5e9b16359f48b73397c61916482, type: 3}
@@ -164,8 +164,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
+  m_Volume: 0.5
+  m_Pitch: 0.7
   Loop: 0
   Mute: 0
   Spatialize: 0

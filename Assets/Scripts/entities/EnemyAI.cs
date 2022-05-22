@@ -23,8 +23,10 @@ public class EnemyAI : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (Mathf.Abs(Time.timeScale) < float.Epsilon) return;
+
         cooldown -= Time.deltaTime;
-        if (!triggered &&_healthScript.health < maxHealth
+        if (!triggered && _healthScript.health < maxHealth
           || Vector3.Distance(transform.position, player.transform.position) <= 20) {
             triggered = true;
         }
@@ -38,7 +40,7 @@ public class EnemyAI : MonoBehaviour
     protected void OnCollisionStay(Collision other) {
         GameObject obj = other.collider.gameObject;
         if (obj.TryGetComponent<Door>(out Door door) && !door.Open && Random.Range(1, 101) == 100) {
-            door.OnInteract();
+            door.Interact();
         }
     }
 

@@ -5,7 +5,6 @@ public class MinimapShow : MonoBehaviour
     public GameObject player;
     public MeshRenderer mr;
 
-    // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindWithTag("Player");

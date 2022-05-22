@@ -5,14 +5,12 @@ using UnityEngine.UI;
 public class PlayerScript : MonoBehaviour
 {
     [SerializeField] private Camera cam;
-    [SerializeField] private InteractablesScript interactables;
     [SerializeField] private GameObject projectile;
     private float cooldown;
     [SerializeField] private float maxCooldown;
 
     [SerializeField] private AudioClip[] shootSounds;
     [SerializeField] private AudioSource audioSource;
-
     [SerializeField] private PauseScript pauseScript;
 
     [SerializeField] private GameObject markerPrefab;
@@ -24,7 +22,6 @@ public class PlayerScript : MonoBehaviour
     private HealthScript healthScript;
     private Rigidbody _rb;
 
-    // Start is called before the first frame update
     void Start()
     {
         cooldown = 0;
@@ -40,11 +37,13 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
+        if (Mathf.Abs(Time.timeScale) < float.Epsilon) return;
+
         cooldown -= Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
             PlayerPrefs.SetInt("health", healthScript.health);
-            pauseScript.Pause();
+            pauseScript.Paused = true;
         }
 
         if (Input.GetMouseButton(0) && cooldown <= 0) {
@@ -59,7 +58,7 @@ public class PlayerScript : MonoBehaviour
             tmp.GetComponent<ProjectileScript>().isExplosive = PlayerPrefs.GetInt("explosivebullets") != 0;
             
             if (healthScript.godmode) {
-                tmp.GetComponent<ProjectileScript>().damage = 99999;
+                tmp.GetComponent<ProjectileScript>().damage = 999;
             }
             else {
                 tmp.GetComponent<ProjectileScript>().damage = 50 + (PlayerPrefs.GetInt("damage") * 25);
@@ -70,18 +69,16 @@ public class PlayerScript : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.E)) {
-            Debug.Log("E");
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            Physics.Raycast(ray, out hit);
+            Physics.Raycast(ray, out hit, 3f, ~LayerMask.GetMask("Player"));
 
             if (hit.collider) {
                 GameObject tmp = hit.collider.gameObject;
 
-                if(tmp.TryGetComponent<IInteractable>(out IInteractable interactable) && Vector3.Distance(transform.position, tmp.transform.position) < 3) {
-                    Debug.Log("interact");
+                if(tmp.TryGetComponent<IInteractable>(out IInteractable interactable)) {
                     PlayerPrefs.SetInt("health", healthScript.health);
-                    interactables.Interact(interactable);
+                    interactable.Interact();
                 }
             }
         }
@@ -89,13 +86,12 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F)) {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            Physics.Raycast(ray, out hit);
+            Physics.Raycast(ray, out hit, 3f, ~LayerMask.GetMask("Player"));
 
             if (hit.collider) {
                 GameObject tmp = hit.collider.gameObject;
 
-                if (hit.collider.gameObject.name == "Marker(Clone)" &&
-                Vector3.Distance(transform.position, tmp.transform.position) < 3) {
+                if (hit.collider.gameObject.name == "Marker(Clone)") {
                     markerCount++;
                     Destroy(tmp);
                 }

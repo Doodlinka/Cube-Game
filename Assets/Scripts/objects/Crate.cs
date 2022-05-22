@@ -14,7 +14,7 @@ public class Crate : MonoBehaviour, IInteractable
         _enemy = Utils.LoadObject<GameObject>(_EnemyPrefabPath);
     }
 
-    public void OnInteract() {
+    public void Interact() {
         int rand = Random.Range(1, 7);
         if (rand == 1) {
             GameObject tmp = Instantiate(_heal);
@@ -25,7 +25,7 @@ public class Crate : MonoBehaviour, IInteractable
             tmp.transform.position = transform.position;
         }
         else {
-            PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") + Random.Range(4, 7) + PlayerPrefs.GetInt("golddrop"));
+            PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") + Random.Range(4, 7) + 2*PlayerPrefs.GetInt("golddrop"));
         }
         Destroy(gameObject);
     }

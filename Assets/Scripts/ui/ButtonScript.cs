@@ -15,19 +15,18 @@ public class ButtonScript : MonoBehaviour
     }
     
     public void GoToMenu() {
-        SceneManager.LoadScene("Menu");
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        if (pauseScript) {
+            pauseScript.Paused = false;
+        }
         PlayerPrefs.Save();
+        SceneManager.LoadScene("Menu");
     }
 
     public void UpgradeMenu() {
         SceneManager.LoadScene("UpgradeMenu");
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 
     public void Resume() {
-        pauseScript.Pause();
+        pauseScript.Paused = false;
     }
 }

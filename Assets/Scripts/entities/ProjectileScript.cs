@@ -14,6 +14,8 @@ public class ProjectileScript : MonoBehaviour
 
     void Update()
     {
+        if (Mathf.Abs(Time.timeScale) < float.Epsilon) return;
+
         lifetime += Time.deltaTime;
         if (lifetime >= maxLifetime) {
             Destroy(gameObject);
