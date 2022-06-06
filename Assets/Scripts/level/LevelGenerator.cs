@@ -7,15 +7,11 @@ public class LevelGenerator : MonoBehaviour {
 	// create myself
 	public GameObject[] prefabs = new GameObject[4];
 	// create myself
-	public GameObject minimapPrefab;
+	public GameObject minimapPrefab, exitPrefab, doorPrefab;
 	// create myself
 	public GameObject characterController;
 	// create myself
-	public GameObject floorParent;
-	// create myself
-	public GameObject wallsParent;
-	// create myself
-	public GameObject exitPrefab, doorPrefab;
+	[SerializeField] private GameObject boss1, boss2;
 
 	// allows us to see the maze generation from the scene view
 	public bool generateRoof = true;
@@ -61,20 +57,24 @@ public class LevelGenerator : MonoBehaviour {
 		tilesToPlace = Random.Range(150, 251);
 
 		if (PlayerPrefs.GetInt("level") == 5) {
+			// instantiate here and not in spawner so bosses correspond to rooms without extra communication (i'm lazy)
+			GameObject tmp;
 			if (Random.value < 0.5) {
 				mapData = BossRooms.Room1(mazeSize);
+				tmp = Instantiate(boss1);
 			}
 			else {
 				mapData = BossRooms.Room2(mazeSize);
+				tmp = Instantiate(boss2);
 			}
+			tmp.transform.position = new Vector3(10, 1.5f, 12);
 		}
 		else {
 			// initialize map 2D array
 			mapData = GenerateMazeData();
 		}
 
-		floorParent = GameObject.Find("Floor");
-		wallsParent = GameObject.Find("Walls");
+		GameObject wallsParent = new GameObject();
 		characterController = GameObject.FindWithTag("Player");
 
 		// create actual maze blocks from maze boolean data

@@ -16,10 +16,7 @@ public static class BossRooms
 		}
 
         // everything else
-        data[7, 7] = 1; data[7, 8] = 1; data[7, 9] = 1; data[7, 10] = 1;
-        data[11, 3] = 1; data[12, 3] = 1; data[13, 3] = 1; data[14, 3] = 1;
-        data[18, 7] = 1; data[18, 8] = 1; data[18, 9] = 1; data[18, 10] = 1;
-        data[11, 14] = 1; data[12, 14] = 1; data[13, 14] = 1; data[14, 14] = 1;
+        data[7, 3] = 1; data[7, 12] = 1; data[16, 3] = 1; data[16, 12] = 1;
 
         return data;
     }
@@ -36,9 +33,6 @@ public static class BossRooms
 			data[z, 0] = 1;
 			data[z, 21] = 1;
 		}
-
-        // everything else
-        data[7, 3] = 1; data[7, 12] = 1; data[16, 3] = 1; data[16, 12] = 1;
 
         return data;
     }

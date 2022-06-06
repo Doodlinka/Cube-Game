@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(HealthScript))]
+[RequireComponent(typeof(Rigidbody), typeof(HealthScript), typeof(MeshRenderer))]
 public class EnemyAI : MonoBehaviour
 {
+    protected static Material _hurtMaterial;
+    protected const string _hurtMaterialPath = "glowing red";
+
     protected float cooldown;
     protected bool triggered;
     protected GameObject player;
@@ -10,13 +13,24 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] protected float maxCooldown, speed;
     [SerializeField] protected AudioSource source;
     [SerializeField] protected AudioClip hitSound;
+    protected Material _defaultMaterial;
     protected Rigidbody _rb;
+    protected MeshRenderer _mr;
     protected HealthScript _healthScript;
+    [SerializeField] protected GameObject heal;
+    public bool dropsHealth = true;
 
     protected virtual void Start()
     {
+        if (!_hurtMaterial) {
+            _hurtMaterial = Utils.LoadObject<Material>(_hurtMaterialPath);
+        }
         _rb = GetComponent<Rigidbody>();
+        _mr = GetComponent<MeshRenderer>();
+        _defaultMaterial = _mr.material;
         _healthScript = GetComponent<HealthScript>();
+        _healthScript.OnHit += OnHit;
+        _healthScript.OnDeath += OnDeath;
         player = GameObject.FindGameObjectWithTag("Player");
         maxHealth =_healthScript.health;
     }
@@ -62,5 +76,27 @@ public class EnemyAI : MonoBehaviour
             source.Play();
             cooldown = maxCooldown;
         }
+    }
+
+    protected virtual void OnHit() {
+        _mr.material = _hurtMaterial;
+        Invoke("SetDefaultMaterial", 0.15f);
+    }
+
+    protected void SetDefaultMaterial() {
+        _mr.material = _defaultMaterial;
+    }
+
+    protected virtual void OnDeath() {
+        if (Random.Range(1, 6 - PlayerPrefs.GetInt("hdrop") + 1) == 1 && dropsHealth) {
+            GameObject tmp =  Instantiate(heal);
+            tmp.transform.position = transform.position;
+        }
+        PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") + 2 + PlayerPrefs.GetInt("golddrop"));
+    }
+
+    ~EnemyAI() {
+        _healthScript.OnHit -= OnHit;
+        _healthScript.OnDeath -= OnDeath;
     }
 }

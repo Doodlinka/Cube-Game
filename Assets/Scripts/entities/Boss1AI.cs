@@ -14,6 +14,7 @@ public class Boss1AI : EnemyAI
     private string[] _EnemyPrefabNames = new string[3] {"Enemy(small)", "Enemy", "Enemy(big)"};
 
     [SerializeField] protected float dashForce;
+    [SerializeField] protected GameObject exit;
     protected int attack;
     protected bool secondPhase;
     protected float _meleeCooldown;
@@ -23,6 +24,8 @@ public class Boss1AI : EnemyAI
     protected override void Start()
     {
         base.Start();
+        _healthScript.OnHit += OnHit;
+        _healthScript.OnDeath += OnDeath;
         for (int i = 0; i < _EnemyPrefabNames.Length; i++) {
             _minionPrefabs[i] = Utils.LoadObject<GameObject>(_EnemyPrefabNames[i], _EnemyPrefabFolder);
         }
@@ -62,7 +65,7 @@ public class Boss1AI : EnemyAI
                 for (int i = 0; i < 3; i++) {
                     GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.small]);
                     tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
-                    tmp.GetComponent<HealthScript>().dropsHealth = false;
+                    tmp.GetComponent<EnemyAI>().dropsHealth = false;
                 }
                 cooldown = maxCooldown * 2;
             }
@@ -70,7 +73,7 @@ public class Boss1AI : EnemyAI
                 for (int i = 0; i < 2; i++) {
                     GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.medium]);
                     tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
-                    tmp.GetComponent<HealthScript>().dropsHealth = false;
+                    tmp.GetComponent<EnemyAI>().dropsHealth = false;
                 }
                 cooldown = maxCooldown * 2;
             }
@@ -78,7 +81,7 @@ public class Boss1AI : EnemyAI
                 for (int i = 0; i < 1; i++) {
                     GameObject tmp = Instantiate(_minionPrefabs[(int)EnemyPrefabPathIDs.large]);
                     tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
-                    tmp.GetComponent<HealthScript>().dropsHealth = false;
+                    tmp.GetComponent<EnemyAI>().dropsHealth = false;
                 }
                 cooldown = maxCooldown * 2;
             }
@@ -101,5 +104,15 @@ public class Boss1AI : EnemyAI
             source.Play();
             _meleeCooldown = maxCooldown;
         }
+    }
+
+    protected virtual void OnDeath() {
+        PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") + 30 + PlayerPrefs.GetInt("golddrop"));
+        for (int i = 0; i < 10; i++) {
+            GameObject tmp = Instantiate(heal);
+            tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
+        }
+        GameObject e = Instantiate(exit);
+        e.transform.position = new Vector3(transform.position.x, 0.51f, transform.position.z);
     }
 }

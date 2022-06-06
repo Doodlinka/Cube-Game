@@ -32,6 +32,7 @@ public class UpgradeScript : MonoBehaviour
         if (PlayerPrefs.GetInt("hp") < 5 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("hp") + 1) * 20) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("hp") + 1) * 20));
             PlayerPrefs.SetInt("hp", PlayerPrefs.GetInt("hp") + 1);
+            PlayerPrefs.SetInt("health", PlayerPrefs.GetInt("health") + 10);
         }
         UpdateText();
     }
@@ -59,7 +60,7 @@ public class UpgradeScript : MonoBehaviour
         UpdateText();
     }
     public void UpgradeCrateChance() {
-        if (PlayerPrefs.GetInt("cratechance") < 3 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("cratechance") + 1) * 50) {
+        if (PlayerPrefs.GetInt("cratechance") < 3 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("cratechance") + 1) * 30) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("cratechance") + 1) * 30));
             PlayerPrefs.SetInt("cratechance", PlayerPrefs.GetInt("cratechance") + 1);
         }
@@ -67,7 +68,7 @@ public class UpgradeScript : MonoBehaviour
     }
 
     public void UpgradeExplosiveBullets() {
-        if (PlayerPrefs.GetInt("explosivebullets") < 1 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("explosivebullets") + 1) * 50) {
+        if (PlayerPrefs.GetInt("explosivebullets") < 1 && PlayerPrefs.GetInt("gold") >= (PlayerPrefs.GetInt("explosivebullets") + 1) * 100) {
             PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") - ((PlayerPrefs.GetInt("explosivebullets") + 1) * 100));
             PlayerPrefs.SetInt("explosivebullets", PlayerPrefs.GetInt("explosivebullets") + 1);
         } 

@@ -3,18 +3,14 @@
 public class Spawner : MonoBehaviour
 {
     public LevelGenerator generator;
-    public GameObject prefab, prefabB, prefabS, prefabR, crate, barrel, boss1, boss2, parent;
+    public GameObject prefab, prefabB, prefabS, prefabR, crate, barrel;
     public int counter = 0;
 
     void Start()
     {
-        if (PlayerPrefs.GetInt("level") == 5) {
-            GameObject tmp = Random.value < 0.5 ? Instantiate(boss1) : Instantiate(boss2);
-            tmp.transform.position = new Vector3(10, 1.5f, 12);
-            return;
-        }
+        if (PlayerPrefs.GetInt("level") == 5) { return; }
 
-        parent = GameObject.Find("Enemies");
+        GameObject parent = new GameObject();
 
         for (int z = 0; z < generator.mazeSize; z++) {
             for (int x = 0; x < generator.mazeSize; x++) {

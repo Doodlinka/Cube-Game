@@ -100,11 +100,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dmg: 20
   maxHealth: 1800
-  maxCooldown: 1
+  maxCooldown: 1.2
   speed: 2.5
   source: {fileID: 120660093929224774}
   hitSound: {fileID: 8300000, guid: 29a6cffb36ec4fa4b984a2b600617fca, type: 3}
-  dashForce: 25
+  heal: {fileID: 1641105571346691968, guid: f5b6a5e9b16359f48b73397c61916482, type: 3}
+  dropsHealth: 1
+  dashForce: 20
+  exit: {fileID: 6307270183983036946, guid: a86cfce7517e97542b4095035fc17a60, type: 3}
 --- !u!114 &3487095983295400163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,9 +123,6 @@ MonoBehaviour:
   health: 1500
   godmode: 0
   text: {fileID: 0}
-  heal: {fileID: 1641105571346691968, guid: f5b6a5e9b16359f48b73397c61916482, type: 3}
-  exit: {fileID: 6307270183983036946, guid: a86cfce7517e97542b4095035fc17a60, type: 3}
-  dropsHealth: 0
 --- !u!54 &5667388863741085799
 Rigidbody:
   m_ObjectHideFlags: 0

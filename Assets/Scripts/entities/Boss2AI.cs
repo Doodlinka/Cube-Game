@@ -30,7 +30,7 @@ public class Boss2AI : Boss1AI
             for (int i = 0; i < Random.Range(1, 4); i++) {
                 GameObject tmp = Instantiate(minion);
                 tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
-                tmp.GetComponent<HealthScript>().dropsHealth = false;
+                tmp.GetComponent<EnemyAI>().dropsHealth = false;
             }
             attack = 0;
             cooldown = maxCooldown*2;
@@ -67,5 +67,15 @@ public class Boss2AI : Boss1AI
             }
         }
         attack = 0;
+    }
+
+    protected virtual void OnDeath() {
+        PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold") + 30 + PlayerPrefs.GetInt("golddrop"));
+        for (int i = 0; i < 10; i++) {
+            GameObject tmp = Instantiate(heal);
+            tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
+        }
+        GameObject e = Instantiate(exit);
+        e.transform.position = new Vector3(transform.position.x, 0.51f, transform.position.z);
     }
 }

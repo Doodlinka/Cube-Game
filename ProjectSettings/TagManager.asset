@@ -10,6 +10,7 @@ TagManager:
   - Heal
   - Explosion
   - Barrel
+  - Marker
   layers:
   - Default
   - TransparentFX

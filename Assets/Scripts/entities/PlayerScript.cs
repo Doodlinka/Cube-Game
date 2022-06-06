@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody), typeof(HealthScript))]
 public class PlayerScript : MonoBehaviour
@@ -33,6 +34,8 @@ public class PlayerScript : MonoBehaviour
         else {
             healthScript.health = 100 + (PlayerPrefs.GetInt("hp") * 10);
         }
+        // healthScript.OnHit += OnHit;
+        healthScript.OnDeath += OnDeath;
     }
 
     void Update()
@@ -88,21 +91,17 @@ public class PlayerScript : MonoBehaviour
             RaycastHit hit;
             Physics.Raycast(ray, out hit, 3f, ~LayerMask.GetMask("Player"));
 
-            if (hit.collider) {
-                GameObject tmp = hit.collider.gameObject;
-
-                if (hit.collider.gameObject.name == "Marker(Clone)") {
-                    markerCount++;
-                    Destroy(tmp);
-                }
-                else if (markerCount > 0) {
-                    markerCount--;
-                    GameObject mark = Instantiate(markerPrefab);
-                    mark.transform.position = transform.position;
-                }
+            if (hit.collider && hit.collider.gameObject.tag == "Marker") {
+                markerCount++;
+                Destroy(hit.collider.gameObject);
                 text.text = "Markers: " + markerCount.ToString();
             }
-            
+            else if (markerCount > 0) {
+                markerCount--;
+                GameObject mark = Instantiate(markerPrefab);
+                mark.transform.position = transform.position;
+                text.text = "Markers: " + markerCount.ToString();
+            }      
         }
 
         if (Input.GetKeyDown(KeyCode.M)) {
@@ -127,5 +126,25 @@ public class PlayerScript : MonoBehaviour
             healthScript.TakeDamage(50);
             _rb.AddExplosionForce(e.speed*20, e.transform.position, e.size);
         }
+    }
+
+    // private void OnHit() {
+
+    // }
+
+    private void OnDeath() {
+        PlayerPrefs.DeleteKey("level");
+        PlayerPrefs.DeleteKey("health");
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("Game Over");
+    }
+
+    ~PlayerScript() {
+        // healthScript.OnHit -= OnHit;
+        healthScript.OnDeath -= OnDeath;
     }
 }
