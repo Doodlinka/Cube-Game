@@ -41,3 +41,11 @@ Thoughout the years i have made several attempts of varying success to polish/re
 GD50 certificate, so i made this thing playable for such an occasion. IIRC the first version had 8 levels with no bosses, ranged
 enemies and upgrades, and was way buggier. It's also a little different from what's in the video because i made some last minute 
 changes, minor enough to not record and edit a new video.
+
+#### Borrowed code that i remember about
+- unity standard assets first person controller
+- GD50 dreadhalls mazegen
+- the raycast shoot thing from GD50 portal, maybe
+
+#### Thanks
+Dad for testing.
