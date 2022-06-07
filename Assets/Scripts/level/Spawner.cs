@@ -43,10 +43,12 @@ public class Spawner : MonoBehaviour
                 if (generator.mapData[z, x] == 0 && Random.Range(1, 201 - (generator.level * 10) - (PlayerPrefs.GetInt("cratechance") * 10)) == 1) {
                     GameObject tmp = Instantiate(crate);
                     tmp.transform.position = new Vector3(x, 1, z);
+                    tmp.transform.parent = parent.transform;
                 }
                 if (generator.mapData[z, x] == 0 && Random.Range(1, 501) == 1) {
                     GameObject tmp = Instantiate(barrel);
                     tmp.transform.position = new Vector3(x, 1, z);
+                    tmp.transform.parent = parent.transform;
                 }
             }
         }

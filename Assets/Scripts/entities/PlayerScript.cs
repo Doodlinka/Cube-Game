@@ -15,8 +15,6 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private PauseScript pauseScript;
 
     [SerializeField] private GameObject markerPrefab;
-    [SerializeField] private int markerCount;
-    [SerializeField] private Text text;
     
     [SerializeField] private Image dot;
 
@@ -92,21 +90,16 @@ public class PlayerScript : MonoBehaviour
             Physics.Raycast(ray, out hit, 3f, ~LayerMask.GetMask("Player"));
 
             if (hit.collider && hit.collider.gameObject.tag == "Marker") {
-                markerCount++;
                 Destroy(hit.collider.gameObject);
-                text.text = "Markers: " + markerCount.ToString();
             }
-            else if (markerCount > 0) {
-                markerCount--;
+            else  {
                 GameObject mark = Instantiate(markerPrefab);
                 mark.transform.position = transform.position;
-                text.text = "Markers: " + markerCount.ToString();
             }      
         }
 
         if (Input.GetKeyDown(KeyCode.M)) {
             cam.enabled = !cam.enabled;
-            text.enabled = cam.enabled;
             dot.enabled = cam.enabled;
         }
 

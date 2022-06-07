@@ -121,7 +121,7 @@ public class LevelGenerator : MonoBehaviour {
 			} while (mapData[exitZ, exitX] != 0);
 
 			// create exit
-			Instantiate(exitPrefab, new Vector3(exitX, 0.51f, exitZ), Quaternion.identity);
+			Instantiate(exitPrefab, new Vector3(exitX, 0.55f, exitZ), Quaternion.identity);
 		}
 	}
 

@@ -113,6 +113,6 @@ public class Boss1AI : EnemyAI
             tmp.transform.position = transform.position + new Vector3(Random.Range(-2, 3), 0, Random.Range(-2, 3));
         }
         GameObject e = Instantiate(exit);
-        e.transform.position = new Vector3(transform.position.x, 0.51f, transform.position.z);
+        e.transform.position = new Vector3(transform.position.x, 0.55f, transform.position.z);
     }
 }
