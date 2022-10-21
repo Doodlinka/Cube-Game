@@ -17,6 +17,7 @@ CONTROLS:
 - G to toggle godmode
 - Esc to pause
 - LMB to shoot
+
 Start in the menu scene, press play, and appear at level 1 unless you have a saved run. 
 Your health and level will be displayed at the top. Go through doors, shoot enemies to not die, use markers and the minimap if
 you need to mark something (but you probably won't) and look for a trapdoor thing, interact with it to go to the next level.
